@@ -15,6 +15,14 @@ $ npm start
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+To deploy the app
+
+```
+$ npm run deploy
+```
+
+You can visit the live version at: [https://bksahu.github.io/luis-batch-tester/](https://bksahu.github.io/luis-batch-tester/)
+
 ## Usage
 
 For the app to work the each input utterance should be in one line followed by other utterances in the specified syntax.
