@@ -2,6 +2,8 @@
 
 This app takes your utterances and return it in JSON format which can be used for LUIS batch-testing.
 
+![ScreenShot](./public/ss.png)
+
 ## Installation
 
 In the project directory, you can run:
