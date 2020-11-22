@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/luis-batch-tester/static/css/main.28770ce7.chunk.css",
-    "main.js": "/luis-batch-tester/static/js/main.c64932c4.chunk.js",
-    "main.js.map": "/luis-batch-tester/static/js/main.c64932c4.chunk.js.map",
+    "main.js": "/luis-batch-tester/static/js/main.711e927c.chunk.js",
+    "main.js.map": "/luis-batch-tester/static/js/main.711e927c.chunk.js.map",
     "runtime-main.js": "/luis-batch-tester/static/js/runtime-main.31eeca28.js",
     "runtime-main.js.map": "/luis-batch-tester/static/js/runtime-main.31eeca28.js.map",
     "static/css/2.1a02f21c.chunk.css": "/luis-batch-tester/static/css/2.1a02f21c.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.1a02f21c.chunk.css",
     "static/js/2.613b4e5a.chunk.js",
     "static/css/main.28770ce7.chunk.css",
-    "static/js/main.c64932c4.chunk.js"
+    "static/js/main.711e927c.chunk.js"
   ]
 }
