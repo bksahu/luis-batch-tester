@@ -1,8 +1,6 @@
 import React from 'react';
 
-import DefaultNavbar from './components/navbar';
-import InputUtterances from './components/inputArea';
-import ResponseJSON from './components/responseArea';
+import { DefaultNavbar, AlertInputError, InputUtterances, ResponseJSON } from './components';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap'
@@ -12,11 +10,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       inputString: 'Syntax: \nutterance; intent; entityName1:entityType1; entityName2:entityType2; ... \n',
-      jsonObjects: []
+      jsonObjects: [],
+      showError: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnClose = this.handleOnClose.bind(this);
     this.parseJSON = this.parseJSON.bind(this);
     this.onEdit = this.onEdit.bind(this);
   }
@@ -28,44 +28,55 @@ class App extends React.Component {
   handleSubmit(event) {
     this.state.inputString === '' ? alert('Utterances are empty') : this.parseJSON();
     event.preventDefault();
-  } 
+  }
 
-  onEdit(e) {
-    this.setState({ jsonObjects: e.updated_src }, function() {
-      console.log(this.state.jsonObjects)      
+  handleOnClose() {
+    this.setState({ showError: false })
+  }
+
+  onEdit(event) {
+    this.setState({ jsonObjects: event.updated_src }, function () {
+      console.log(this.state.jsonObjects)
     })
   }
 
   parseJSON() {
     let jsonObjects = []
 
-    for (let line of this.state.inputString.split(/\r?\n/)) {
-      let [utterance, intent, ...entities] = line.split(/;/)
-      let responseJSON = {
-        "text": utterance.trim(),
-        "intent": intent.trim(),
-        "entities": []
+    try {
+      for (let line of this.state.inputString.split(/\r?\n/)) {
+        let [utterance, intent, ...entities] = line.split(/;/)
+        let responseJSON = {
+          "text": utterance.trim(),
+          "intent": intent.trim(),
+          "entities": []
+        }
+
+        for (let entity of entities) {
+          let [entityName, entityType] = entity.split(/:/)
+          entityName = entityName.trim()
+          entityType = entityType.trim()
+          responseJSON.entities.push(
+            {
+              "entity": entityType,
+              "startPos": utterance.indexOf(entityName),
+              "endPos": utterance.indexOf(entityName) + entityName.length - 1
+            }
+          )
+        }
+
+        jsonObjects.push(responseJSON)
       }
 
-      for (let entity of entities) {
-        let [entityName, entityType] = entity.split(/:/)
-        entityName = entityName.trim()
-        entityType = entityType.trim()
-        responseJSON.entities.push(
-          {
-            "entity": entityType,
-            "startPos": utterance.indexOf(entityName),
-            "endPos": utterance.indexOf(entityName) + entityName.length - 1
-          }
-        )
-      }
+      this.setState({ jsonObjects: jsonObjects }, function () {
+        console.log(this.state.jsonObjects);
+      })
 
-      jsonObjects.push(responseJSON)
+    } catch (err) {
+      console.log(err)
+      this.setState({ showError: true })
     }
 
-    this.setState({ jsonObjects: jsonObjects }, function() {
-      console.log(this.state.jsonObjects);
-    })
   }
 
   render() {
@@ -74,6 +85,13 @@ class App extends React.Component {
         <DefaultNavbar />
         <br />
         <Container>
+          {this.state.showError? 
+          <Row className="justify-content-md-center">
+            <AlertInputError handleOnClose={this.handleOnClose}/>
+          </Row>
+          :
+          ""
+          } 
           <Row>
             <Col>
               <InputUtterances
