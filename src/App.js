@@ -11,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputString: 'Syntax: utterance; intent; entity1; entity2; ... \n',
+      inputString: 'Syntax: \nutterance; intent; entityName1:entityType1; entityName2:entityType2; ... \n',
       jsonObjects: []
     };
 
