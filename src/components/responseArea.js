@@ -36,6 +36,7 @@ function ResponseJSON(props) {
                         theme={"summerfruit:inverted"}
                         onEdit={props.onEdit}
                         displayDataTypes={false}
+                        enableClipboard={false}
                     />
                 </div>
             </Form.Group>
