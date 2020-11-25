@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DefaultNavbar, AlertInputError, InputUtterances, ResponseJSON } from './components';
+import { DefaultNavbar, UploadExcel, ResponseJSON } from './components';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap'
@@ -9,29 +9,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputString: 'Syntax: \nutterance; intent; entityName1:entityType1; entityName2:entityType2; ... \n',
       jsonObjects: [],
-      showError: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleOnClose = this.handleOnClose.bind(this);
     this.parseJSON = this.parseJSON.bind(this);
     this.onEdit = this.onEdit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ inputString: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.state.inputString === '' ? alert('Utterances are empty') : this.parseJSON();
-    event.preventDefault();
-  }
-
-  handleOnClose() {
-    this.setState({ showError: false })
   }
 
   onEdit(event) {
@@ -40,20 +22,20 @@ class App extends React.Component {
     })
   }
 
-  parseJSON() {
+  parseJSON(data) {
     let jsonObjects = []
-
+    console.log(data)
     try {
-      for (let line of this.state.inputString.split(/\r?\n/)) {
-        let [utterance, intent, ...entities] = line.split(/;/)
+      for (let line of data) {
+        let [utterance, intent, ...entities] = line
         let responseJSON = {
           "text": utterance.trim(),
           "intent": intent.trim(),
           "entities": []
         }
 
-        for (let entity of entities) {
-          let [entityName, entityType] = entity.split(/:/)
+        for (let i = 1; i < entities.length; i+=2) {
+          let [entityName, entityType] = [entities[i-1], entities[i]];
           entityName = entityName.trim()
           entityType = entityType.trim()
           responseJSON.entities.push(
@@ -74,7 +56,6 @@ class App extends React.Component {
 
     } catch (err) {
       console.log(err)
-      this.setState({ showError: true })
     }
 
   }
@@ -85,20 +66,9 @@ class App extends React.Component {
         <DefaultNavbar />
         <br />
         <Container>
-          {this.state.showError? 
-          <Row className="justify-content-md-center">
-            <AlertInputError handleOnClose={this.handleOnClose}/>
-          </Row>
-          :
-          ""
-          } 
           <Row>
             <Col>
-              <InputUtterances
-                inputString={this.state.inputString}
-                handleSubmit={this.handleSubmit}
-                handleChange={this.handleChange}
-              />
+              <UploadExcel handleSubmit={this.parseJSON} />
             </Col>
             <Col>
               <ResponseJSON

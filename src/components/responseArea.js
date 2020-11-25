@@ -42,7 +42,7 @@ function ResponseJSON(props) {
             </Form.Group>
 
             <div className="text-center">
-                <Button variant="primary" onClick={downloadObjectAsJson} >
+                <Button variant="success" disabled={!props.jsonObject.length} onClick={downloadObjectAsJson} >
                     Download
                 </Button>
             </div>
